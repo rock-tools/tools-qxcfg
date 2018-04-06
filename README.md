@@ -1,48 +1,63 @@
-qxcfg
-=============
-Quick (XML-base) configuration library
+# QXCFG - Quick XML handling and XML-based Configuration
 
-A library which allow quick configuration of libraries using XML
+This library intends to facilitate and speed up the integration of an XML-based
+configuration.
 
-License
--------
-dummy-license
+The configuration relies on a hierarchical structured XML document, where tags
+can be chosen arbitrarily to be numeric or string properties.
+Internally only the string object will be stored and casted to the expected
+type (see example).
 
-Installation
-------------
-The easiest way to build and install this package is to use Rock's build system.
-See [this page](http://rock-robotics.org/stable/documentation/installation.html)
-on how to install Rock.
+## Example
 
-However, if you feel that it's too heavy for your needs, Rock aims at having
-most of its "library" packages (such as this one) to follow best practices. See
-[this page](http://rock-robotics.org/stable/documentation/packages/outside_of_rock.html)
-for installation instructions outside of Rock.
+The configuration has to be a valid XML document:
+```
+<my-configuration>
+    <property_a>a</property_a>
+    <property_b>b</property_b>
+    <property_c>
+        <property_d>cd</property_d>
+    </property_c>
+    <numeric_properties>
+        <int>121</int>
+        <double>1.21</double>
+    </numeric_properties>
+    <bool_property>
+        <true>true</true>
+        <false>false</false>
+        <nonsense>nonsense</nonsense>
+    </bool_property>
+</my-configuration>
+```
 
-Rock CMake Macros
------------------
 
-This package uses a set of CMake helper shipped as the Rock CMake macros.
-Documentations is available on [this page](http://rock-robotics.org/stable/documentation/packages/cmake_macros.html).
+Loading the configuration file and reading properties.
+Note, that the root element is not used to access the properties, and only
+children are considered configuration properties.
 
-Rock Standard Layout
---------------------
+```
+    #include <qxcfg/Configuration.hpp>
+    
+    qxcfg::Configuration configuration("my-configuration.xml");
 
-This directory structure follows some simple rules, to allow for generic build
-processes and simplify reuse of this project. Following these rules ensures that
-the Rock CMake macros automatically handle the project's build process and
-install setup properly.
+    // Per default return string value
+    std::string valueOfAString = configuration.getValue("property_a", "default_value");
 
-### Folder Structure
+    // Throw upon mismatching value types
+    try {
+        configuration.getValueAs<bool>("bool_property/nonsense");
+    } catch(const std::runtime_error& e)
+    {
+        // casting value failed
+    }
 
-| directory         |       purpose                                                        |
-| ----------------- | ------------------------------------------------------               |
-| src/              | Contains all header (*.h/*.hpp) and source files                     |
-| build/ *          | The target directory for the build process, temporary content        |
-| bindings/         | Language bindings for this package, e.g. put into subfolders such as |
-| ruby/             | Ruby language bindings                                               |
-| viz/              | Source files for a vizkit plugin / widget related to this library    |
-| resources/        | General resources such as images that are needed by the program      |
-| configuration/    | Configuration files for running the program                          |
-| external/         | When including software that needs a non standard installation process, or one that can be easily embedded include the external software directly here |
-| doc/              | should contain the existing doxygen file: doxygen.conf               |
+    // Set a default value, that is set when the property is not part of the
+    // configuration file
+    bool optionalProperty = configuration.getValueAs<bool>("optional_property",true);
+
+```
+
+That's it - hopefully simple and quick enough for you.
+
+## Copyright
+2018 DFKI GmbH Robotics Innovation Center

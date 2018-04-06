@@ -1,17 +1,23 @@
 <package>
-  <description brief="Quick (XML-base) configuration library">
-  A library which allow quick configuration of libraries using XML
+  <description brief="Quick XML handling and XML-based configuration">
+  A library to allow quick configuration of libraries using XML
   </description>
   <author>Thomas Roehr/thomas.roehr@dfki.de</author>
+  <maintainer>Thomas Roehr/thomas.roehr@dfki.de</maintainer>
   <license></license>
-  <url>http://</url>
+  <url>https://git.hb.dfki.de:dfki-libraries/qxcfg</url>
   <logo>http://</logo>
-  <depend package="base/cmake" />
-  <!--
-   To add any dependencies use the depend tag
-  <depend package="dummy-dependency-0" />
-	...
-  <depend package="dummy-dependency-n-1" />
-  <depend package="dummy-dependency-n" />
-  -->
+  <depend package="boost" />
+  <depend package="base/logging" />
+  <depend package="libxml2" />
+  <keywords>
+      <keyword>utilities</keyword>
+      <keyword>configuration</keyword>
+  </keywords>
+  <stage>0</stage>
+  <use>single project</use>
+  <activity>active</activity>
+  <classifiers>
+      <classifier>c++</classifier>
+  </classifiers>
 </package>
