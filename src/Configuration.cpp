@@ -12,14 +12,20 @@ Configuration::Configuration(const std::string& path)
     loadXML(path);
 }
 
-const std::string& Configuration::getValue(const std::string& key) const
+const std::string& Configuration::getValue(const std::string& key, const std::string& defaultValue) const
 {
     std::map<std::string, std::string>::const_iterator cit = mProperties.find(key);
     if(cit != mProperties.end())
     {
         return cit->second;
     }
-    throw std::invalid_argument("qxcfg::Configuration::getValue: key '" + key + "' does not exist");
+    if(defaultValue.empty())
+    {
+        throw std::invalid_argument("qxcfg::Configuration::getValue: key '" + key + "' does not exist");
+    } else {
+        return defaultValue;
+    }
+
 }
 
 template<>

@@ -22,7 +22,7 @@ public:
      *
      * \throw std::invalid_argument if key does not exist
      */
-    const std::string& getValue(const std::string& key) const;
+    const std::string& getValue(const std::string& key, const std::string& defaultValue = std::string()) const;
 
     template<typename T>
     T getValueAs(const std::string& key, const T& defaultValue = T()) const

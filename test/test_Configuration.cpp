@@ -20,9 +20,13 @@ BOOST_AUTO_TEST_CASE(load_xml)
 
     BOOST_REQUIRE_MESSAGE(configuration.getValueAs<bool>("bool_property/true") == true, "Configuration: expected bool_property/true == true, but was '" << configuration.getValueAs<bool>("bool_property/true"));
     BOOST_REQUIRE_MESSAGE(configuration.getValueAs<bool>("bool_property/false") == false, "Configuration: expected bool_property/false == false, but was '" << configuration.getValueAs<bool>("bool_property/false"));
-    BOOST_REQUIRE_THROW(configuration.getValueAs<bool>("bool_property/nonsense"), std::runtime_error);
 
+    BOOST_REQUIRE_THROW(configuration.getValueAs<bool>("bool_property/nonsense"), std::runtime_error);
+    BOOST_REQUIRE_THROW(configuration.getValue("bool_noexists/true"), std::invalid_argument);
+
+    BOOST_REQUIRE_MESSAGE(configuration.getValue("bool_noexists/true","defaultValue") == "defaultValue", "Configuration: expected default value for not existing entry");
     BOOST_REQUIRE_MESSAGE(configuration.getValueAs<bool>("bool_noexists/true",true) == true, "Configuration: expected non existing property to be true");
+
 }
 
 BOOST_AUTO_TEST_SUITE_END()
