@@ -4,6 +4,7 @@
 #include <libxml/xpath.h>
 #include <sstream>
 #include "utils/XMLUtils.hpp"
+#include <boost/filesystem.hpp>
 
 namespace qxcfg {
 
@@ -147,6 +148,105 @@ std::string Configuration::toString() const
         ss << p.first << " -> " << p.second << std::endl;
     }
     return ss.str();
+}
+
+void Configuration::save(const std::string& path, const std::string& encoding) const
+{
+    xmlTextWriterPtr writer;
+    xmlDocPtr doc;
+
+    doc = xmlNewDoc(BAD_CAST XML_DEFAULT_VERSION);
+    if(doc == NULL)
+    {
+        throw std::runtime_error("qxcfg::Configuration::save: error creating"
+                " xml document");
+    }
+
+    // Create a new XmlWriter for uri with no compression
+    writer = xmlNewTextWriterDoc(&doc, 0);
+    if(writer == NULL)
+    {
+        throw std::runtime_error("qxcfg::Configuration::save: failed to open file '"
+                + path + "'");
+    }
+
+    // Start the document with the xml default for the version and given encoding
+    int rc = xmlTextWriterStartDocument(writer, NULL, encoding.c_str(), NULL);
+    if(rc < 0)
+    {
+        throw std::runtime_error("qxcfg::Configuration::save: failed to"
+                " start document:  '" + path + "'");
+    }
+
+    std::map<std::string, std::map<std::string, std::string> > topLevel;
+    topLevel["qxcfg"] = mProperties;
+
+    write(writer, topLevel);
+
+    xmlTextWriterEndDocument(writer);
+    xmlFreeTextWriter(writer);
+    xmlSaveFileEnc(path.c_str(), doc, encoding.c_str());
+
+    utils::XMLUtils::lint(path);
+}
+
+std::string Configuration::saveTemp(const std::string& label) const
+{
+    boost::filesystem::path tempDir = boost::filesystem::temp_directory_path();
+    boost::filesystem::path temp = tempDir / boost::filesystem::unique_path();
+
+    std::string filename = temp.native();
+    if(!label.empty())
+    {
+        filename += "-" + label;
+    }
+    filename += ".xml";
+
+    save(filename);
+    return filename;
+}
+
+void Configuration::write(xmlTextWriterPtr writer, const std::map<std::string, std::map<std::string, std::string> >& elements) const
+{
+    for(const std::pair<std::string, std::map<std::string, std::string> >& p : elements)
+    {
+        utils::XMLUtils::startElement(writer, p.first);
+        writePropertyMap(writer, p.second);
+        utils::XMLUtils::endElement(writer);
+    }
+}
+
+void Configuration::writePropertyMap(xmlTextWriterPtr writer, const std::map<std::string, std::string>& properties) const
+{
+    // to extract common high level elements and add the rest to it
+    std::map<std::string, std::map<std::string, std::string> > children;
+
+    for(const std::pair<std::string, std::string>& p : properties)
+    {
+        std::string label = p.first;
+        std::string value = p.second;
+
+        size_t pos = label.find_first_of("/");
+        if(pos == 0)
+        {
+            label = label.substr(pos+1);
+            pos = label.find_first_of("/");
+        }
+
+        if(pos != std::string::npos)
+        {
+            std::string firstElement = label.substr(0, pos);
+            std::string remaining = label.substr(pos+1);
+            children[firstElement].insert( std::pair<std::string, std::string>(remaining, value) );
+        } else {
+            // found an actual entry
+            utils::XMLUtils::startElement(writer, label);
+            utils::XMLUtils::writeString(writer, value);
+            utils::XMLUtils::endElement(writer);
+        }
+    }
+
+    write(writer, children);
 }
 
 } // end namespace qxcfg

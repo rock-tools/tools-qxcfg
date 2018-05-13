@@ -8,6 +8,8 @@
 #include <base-logging/Logging.hpp>
 #include <algorithm>
 
+struct _xmlTextWriter;
+
 namespace qxcfg {
 
 class Configuration
@@ -17,6 +19,11 @@ public:
      * Default configuration
      */
     Configuration(const std::string& path = "");
+
+    /**
+     * Set a configuration value
+     */
+    void setValue(const std::string& key, const std::string& value) { mProperties[key] = value; }
 
     /**
      *
@@ -41,12 +48,25 @@ public:
     }
     std::string toString() const;
 
+    /**
+     * Save configuration as XML document
+     */
+    void save(const std::string& filename, const std::string& encodingg = "UTF-8") const;
+
+    /**
+     * Save configuration as temporary file with an optional label
+     * \return name of the temporary file
+     */
+    std::string saveTemp(const std::string& label = "") const;
+
 private:
     void loadXML(const std::string& path);
 
+    void write(_xmlTextWriter* writer, const std::map<std::string, std::map<std::string, std::string> >& elements) const;
+
+    void writePropertyMap(_xmlTextWriter* writer, const std::map<std::string, std::string>& properties) const;
+
     std::map<std::string, std::string> mProperties;
-
-
 };
 
 template<>

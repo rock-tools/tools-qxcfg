@@ -29,4 +29,14 @@ BOOST_AUTO_TEST_CASE(load_xml)
 
 }
 
+BOOST_AUTO_TEST_CASE(write_xml)
+{
+    Configuration configuration;
+    configuration.setValue("/test/property","0");
+    configuration.setValue("/test/property1","1");
+    configuration.setValue("/test/foo/bar","1");
+
+    BOOST_TEST_MESSAGE("File saved as: " << configuration.saveTemp());
+}
+
 BOOST_AUTO_TEST_SUITE_END()
