@@ -8,6 +8,51 @@ can be chosen arbitrarily to be numeric or string properties.
 Internally only the string object will be stored and casted to the expected
 type (see example).
 
+## Installation
+
+This library depends upon the libraries:
+ - boost
+ - libxml2
+ - base/logging (Rock's logging library)
+
+For installation you can either install all dependencies manually and run the
+following commands:
+```
+    mkdir build
+    cd build
+    cmake ..
+    make
+```
+
+or use the existing Rock infrastructure:
+
+```
+    sudo apt install ruby wget
+    mkdir your_workspace_dir
+    cd your_workspace_dir
+    wget http://www.rock-robotics.org/master/autoproj_bootstrap
+    ruby autoproj_bootstrap
+```
+
+The build tooling:
+```
+    amake tools/qxcfg
+```
+
+## Tests
+To enable test you have to set the define
+ROCK_TEST_ENABLE=ON when configuring this library via cmake.
+
+You can also your autoproj for this purpose via:
+```
+    autoproj test enable tools/qxcfg
+```
+
+Tests are implemented based on Boost Testing and can be run with
+```
+./build/test/test_suite
+```
+    
 ## Example
 
 The configuration has to be a valid XML document:
@@ -29,7 +74,6 @@ The configuration has to be a valid XML document:
     </bool_property>
 </my-configuration>
 ```
-
 
 Loading the configuration file and reading properties.
 Note, that the root element is not used to access the properties, and only
@@ -59,5 +103,11 @@ children are considered configuration properties.
 
 That's it - hopefully simple and quick enough for you.
 
+## License
+
+This project is licensed under the [New BSD License](https://opensource.org/licenses/BSD-3-Clause).
+
 ## Copyright
-2018 DFKI GmbH Robotics Innovation Center
+Copyright (c) 2018  Thomas M Roehr, DFKI GmbH Robotics Innovation Center
+
+
