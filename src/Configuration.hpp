@@ -12,9 +12,12 @@ struct _xmlTextWriter;
 
 namespace qxcfg {
 
+typedef std::map<std::string, std::string> PropertyMap;
+
 class Configuration
 {
 public:
+
     /**
      * Default configuration
      */
@@ -46,6 +49,7 @@ public:
 
         return defaultValue;
     }
+
     std::string toString() const;
 
     /**
@@ -59,6 +63,11 @@ public:
      */
     std::string saveTemp(const std::string& label = "") const;
 
+    /**
+     * Return the complete property map
+     */
+    const PropertyMap& getPropertyMap() const { return mProperties; }
+
 private:
     void loadXML(const std::string& path);
 
@@ -66,7 +75,7 @@ private:
 
     void writePropertyMap(_xmlTextWriter* writer, const std::map<std::string, std::string>& properties) const;
 
-    std::map<std::string, std::string> mProperties;
+    PropertyMap mProperties;
 };
 
 template<>
