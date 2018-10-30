@@ -72,21 +72,22 @@ std::string XMLUtils::resolveNamespacePrefix(xmlDocPtr doc, xmlNodePtr node, con
     std::string href;
     bool found = false;
 
-    // Walk list and register xpath
-    while( nsList != NULL && (*nsList)->next)
+    xmlNsPtr ns = *nsList;
+    while( ns != NULL )
     {
-        if( (*nsList)->prefix != NULL)
+        if( ns->prefix != NULL)
         {
-            std::string content((const char*) (*nsList)->prefix);
-            if(content == prefix && (*nsList)->href != NULL)
+            std::string content((const char*) ns->prefix);
+            if(content == prefix && ns->href != NULL)
             {
-                std::string content((const char*) (*nsList)->href);
+                std::string content((const char*) ns->href);
                 href = content;
                 found = true;
                 break;
             }
         }
-        ++nsList; // Next
+
+        ns = ns->next;
     }
     if(deleteRef != NULL)
     {
