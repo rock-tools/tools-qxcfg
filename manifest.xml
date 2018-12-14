@@ -4,7 +4,7 @@
   </description>
   <author>Thomas Roehr/thomas.roehr@dfki.de</author>
   <maintainer>Thomas Roehr/thomas.roehr@dfki.de</maintainer>
-  <license></license>
+  <license>BSD-3-Clause</license>
   <url>https://git.hb.dfki.de:dfki-libraries/qxcfg</url>
   <logo>http://</logo>
   <depend package="boost" />
@@ -14,7 +14,7 @@
       <keyword>utilities</keyword>
       <keyword>configuration</keyword>
   </keywords>
-  <stage>0</stage>
+  <stage>1</stage>
   <use>single project</use>
   <activity>active</activity>
   <classifiers>
