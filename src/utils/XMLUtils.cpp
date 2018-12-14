@@ -1,7 +1,6 @@
 #include "XMLUtils.hpp"
 #include <sstream>
 #include <stdexcept>
-#include <boost/lexical_cast.hpp>
 #include <base-logging/Logging.hpp>
 
 namespace qxcfg {
