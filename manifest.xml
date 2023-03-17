@@ -3,10 +3,9 @@
   A library to allow quick configuration of libraries using XML
   </description>
   <author>Thomas Roehr/thomas.roehr@dfki.de</author>
-  <maintainer>Thomas Roehr/thomas.roehr@dfki.de</maintainer>
+  <maintainer>Thomas Roehr/roehr@simula.no</maintainer>
   <license>BSD-3-Clause</license>
-  <url>https://git.hb.dfki.de:dfki-libraries/qxcfg</url>
-  <logo>http://</logo>
+  <url>https://github.com/rock-tools/tools-qxcfg</url>
   <depend package="boost" />
   <depend package="base/logging" />
   <depend package="libxml2" />
