@@ -143,7 +143,7 @@ void Configuration::loadXML(const std::string& url)
 std::string Configuration::toString() const
 {
     std::stringstream ss;
-    for(const std::pair<std::string, std::string>& p : mProperties)
+    for(const std::pair<const std::string, std::string>& p : mProperties)
     {
         ss << p.first << " -> " << p.second << std::endl;
     }
@@ -208,7 +208,7 @@ std::string Configuration::saveTemp(const std::string& label) const
 
 void Configuration::write(xmlTextWriterPtr writer, const std::map<std::string, std::map<std::string, std::string> >& elements) const
 {
-    for(const std::pair<std::string, std::map<std::string, std::string> >& p : elements)
+    for(const std::pair<const std::string, std::map<std::string, std::string> >& p : elements)
     {
         utils::XMLUtils::startElement(writer, p.first);
         writePropertyMap(writer, p.second);
@@ -221,7 +221,7 @@ void Configuration::writePropertyMap(xmlTextWriterPtr writer, const std::map<std
     // to extract common high level elements and add the rest to it
     std::map<std::string, std::map<std::string, std::string> > children;
 
-    for(const std::pair<std::string, std::string>& p : properties)
+    for(const std::pair<const std::string, std::string>& p : properties)
     {
         std::string label = p.first;
         std::string value = p.second;
